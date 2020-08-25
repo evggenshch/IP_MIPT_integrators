@@ -3,7 +3,7 @@ from skimage import color
 from skimage import io
 import numpy as np
 
-def first_phase_integrator(images):
+def first_stage_integration(images):
     imgs = np.asarray(images)
     metrics = []
 
@@ -14,7 +14,7 @@ def first_phase_integrator(images):
     average_img = np.mean(imgs, axis=0).astype(dtype= np.uint8)
     return (metrics, average_img)
 
-def second_phase_integrator(images):
+def second_stage_integration(images):
     imgs = np.asarray(images)
     metrics = []
 
@@ -28,7 +28,7 @@ def second_phase_integrator(images):
     average_img = np.mean(imgs, axis=0)
     return (metrics, average_img)
 
-def third_phase_integrator(images):
+def third_stage_integration(images):
     imgs = np.asarray(images)
     metrics = []
 
@@ -40,3 +40,6 @@ def third_phase_integrator(images):
     #print(imgs.shape)
     average_img = np.mean(imgs, axis=0)
     return (metrics, average_img)
+
+dict_integration_func = {"first_stage": first_stage_integration, "second_stage": second_stage_integration, \
+                          "third_stage": third_stage_integration}
