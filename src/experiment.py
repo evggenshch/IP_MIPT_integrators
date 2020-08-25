@@ -1,13 +1,12 @@
 
 import numpy as np
-import math
-import integration
-import luminosity_videoflow
-from augmentation import first_stage_augmentation, second_stage_augmentation, third_stage_augmentation, dict_augmentation_func
-from integration import  first_stage_integration, second_stage_integration, third_stage_integration, dict_integration_func
-from utils import l2_metric
+from src.augmentation import dict_augmentation_func
+from src.integration import dict_integration_func
+from sklearn.metrics import mean_squared_error
 
+def l2_metric(img_prev, img_next):
 
+    return mean_squared_error(img_next, img_prev)
 
 
 def measure_convergence(imgs, convergence_interval = 0.1):
@@ -39,6 +38,10 @@ def conduct_experiment(videoflow, stage_augmentation = "first_stage", stage_inte
 
     for cur_experiment in range(num):
         np.random.seed(42)
+
+        augmented_imgs = dict_augmentation_func[stage_augmentation](images)
+        integrated_imgs = dict_integration_func[stage_integration](augmented_imgs)
+
         convergence_rate, convergence_flag = measure_convergence()
         if convergence_flag:
             converged_num += 1

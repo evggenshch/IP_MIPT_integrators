@@ -4,7 +4,7 @@ from skimage import color
 from skimage import io
 import random
 import math
-from sklearn.metrics import mean_squared_error
+
 
 SRGB_BORDER = 0.04045
 RGB_BORDER = 0.0031308
@@ -16,9 +16,6 @@ RGB_BORDER = 0.0031308
 
 #   Define custom gamma correction
 
-def l2_metric(img_prev, img_next):
-
-    return mean_squared_error(img_next, img_prev)
 
 def from_srgb_to_rgb(srgb_img):
 
@@ -54,3 +51,13 @@ def from_rgb_to_srgb(rgb_img):
 
    # srgb_img = (srgb_img * 255).astype(np.uint8)
     return srgb_img
+
+
+
+def image_brightness_alignment(input_img, mode="Shoes-sRGB.jpg"):
+
+    if mode == "Shoes-sRGB.jpg":
+        output_img = (from_rgb_to_srgb(from_srgb_to_rgb(input_img).astype(dtype=np.float32) / 255 * 0.9) \
+                  * 255).astype(dtype=np.uint8)
+
+    return output_img

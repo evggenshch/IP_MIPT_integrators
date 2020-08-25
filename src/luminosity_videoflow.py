@@ -88,13 +88,8 @@ class VideoFlow(object):
         self.max_brightness_variation = 1000
         if(image_path == "Shoes-sRGB.jpg"):    #   TO-DO:  change for general case
 
-            self.image = (from_rgb_to_srgb(from_srgb_to_rgb(self.image).astype(dtype = np.float32) / 255 * 0.9) \
-                          * 255).astype(dtype=np.uint8)
-            self.max_brightness_variation = 1.1
 
-        self.first_stage_frames = []
-        self.second_stage_frames = []
-        self.third_stage_frames = []
+            self.max_brightness_variation = 1.1
 
 #    def __getitem__(self, key):
 #        return self.frames[key]

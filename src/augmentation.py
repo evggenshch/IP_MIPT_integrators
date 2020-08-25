@@ -1,14 +1,10 @@
-from utils import from_rgb_to_srgb, from_srgb_to_rgb
-
-
-
-def first_stage_augmentation():
+def first_stage_augmentation(images):
     pass
 
-def second_stage_augmentation():
+def second_stage_augmentation(images):
     pass
 
-def third_stage_augmentation():
+def third_stage_augmentation(images):
     pass
 
 dict_augmentation_func = {"first_stage": first_stage_augmentation, "second_stage": second_stage_augmentation, \
