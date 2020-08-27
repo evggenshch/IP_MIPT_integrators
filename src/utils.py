@@ -9,11 +9,6 @@ import math
 SRGB_BORDER = 0.04045
 RGB_BORDER = 0.0031308
 
-#SRGB_RGB_MATRIX = np.array([[0.18048079, 0.07219232, 0.95053215], \
-#                            [0.35758434, 0.71516868, 0.11919478], \
-#                            [0.41239080, 0.21263901, 0.01933082]])
-#RGB_SRGB_MATRIX = np.array([[], [], []])
-
 #   Define custom gamma correction
 
 

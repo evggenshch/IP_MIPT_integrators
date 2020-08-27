@@ -2,8 +2,18 @@
 import numpy as np
 import copy
 import random
+import math
 from skimage import color
-from utils import from_srgb_to_rgb, from_rgb_to_srgb
+from .utils import from_srgb_to_rgb, from_rgb_to_srgb
+
+def sine_variation(x):
+    return math.sin(x)
+
+def cosine_variation(x):
+    return math.cos(x)
+
+def neg_exp_variation(x):
+    return math.exp(- x ** 2)
 
 def brightness_variation(img, variation_delta_fixed = 0.05, variation_delta_random = 0.1, \
                              variation_func = None, max_brightness_variation = 1000):

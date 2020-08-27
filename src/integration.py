@@ -1,6 +1,4 @@
 
-from skimage import color
-from skimage import io
 import numpy as np
 
 def histogram_match(input_source_img, input_template_img):
@@ -45,7 +43,7 @@ def first_stage_integration(input_imgs):
         integral_imgs.append(raw_mean_combination(input_imgs[:i]))
 
     result_img = integral_imgs[len(input_imgs) - 1]
-    #average_img = np.mean(imgs, axis=0).astype(dtype= np.uint8)
+
     return (integral_imgs, result_img)
 
 def second_stage_integration(input_imgs):
@@ -53,8 +51,10 @@ def second_stage_integration(input_imgs):
     integral_imgs = []
     result_img = input_imgs[0]
 
+    integral_imgs.append(result_img)
     for i in range(1, len(input_imgs)):
         result_img = calibrated_mean_combination(input_imgs[i], result_img)
+        integral_imgs.append(result_img)
 
     return (integral_imgs, result_img)
 
@@ -63,8 +63,10 @@ def third_stage_integration(input_imgs):
     integral_imgs = []
     result_img = input_imgs[0]
 
+    integral_imgs.append(result_img)
     for i in range(1, len(input_imgs)):
         result_img = weighted_calibrated_combination(input_imgs[i], result_img, alpha = 0.1)
+        integral_imgs.append(result_img)
 
     return (integral_imgs, result_img)
 
