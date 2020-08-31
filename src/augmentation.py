@@ -12,7 +12,8 @@ def neg_exp_variation(x):
     return np.exp(- x ** 2)
 
 def default_brightness_variation_func(input_pixel, row, column):
-    return 
+    return np.clip(0.2, 0.9, np.sqrt(np.square(sine_variation(row) * input_pixel)
+                                     + np.square(cosine_variation(column) * input_pixel)))
 
 def brightness_variation(input_img, random_seed = 42, variation_delta_fixed = 0.05, variation_delta_random = 0.1,
                              variation_func = None):
@@ -57,26 +58,36 @@ def color_variation(input_img, random_seed = 42, variation_delta_fixed = 0.01, v
     return augmented_img
 
 
-def first_stage_augmentation(input_img, random_seed = 42, variation_delta_fixed= 0.01, variation_delta_random = 0.1):
+def first_stage_augmentation(input_imgs, random_seed = 42, variation_delta_fixed= 0.05, variation_delta_random = 0.1):
 
-    output_img = brightness_variation(input_img, random_seed, variation_delta_fixed, variation_delta_random)
+    output_imgs = []
 
-    return output_img
+    for i, cur_input_img in enumerate(input_imgs):
+        output_imgs.append(brightness_variation(cur_input_img, i, variation_delta_fixed, variation_delta_random))
 
-
-def second_stage_augmentation(input_img, random_seed = 42, variation_delta_fixed= 0.01, variation_delta_random = 0.1):
-
-    output_img = brightness_variation(input_img, random_seed, variation_delta_fixed, variation_delta_random,)
-
-    return output_img
+    return output_imgs
 
 
-def third_stage_augmentation(input_img, random_seed = 42, variation_delta_fixed= 0.01, variation_delta_random = 0.1):
+def second_stage_augmentation(input_imgs, random_seed = 42, variation_delta_fixed= 0.5, variation_delta_random = 0.5):
 
-    output_img = brightness_variation(input_img, random_seed, variation_delta_fixed, variation_delta_random)
-    output_img = color_variation(output_img, random_seed, variation_delta_fixed, variation_delta_random)
+    output_imgs = []
 
-    return output_img
+    for i, cur_input_img in enumerate(input_imgs):
+        output_imgs.append(brightness_variation(cur_input_img, i, variation_delta_fixed, variation_delta_random,
+                                          default_brightness_variation_func))
+
+    return output_imgs
+
+
+def third_stage_augmentation(input_imgs, random_seed = 42, variation_delta_fixed= 0.5, variation_delta_random = 0.5):
+
+    output_imgs = []
+
+    for i, cur_input_img in enumerate(input_imgs):
+        cur_output_img = brightness_variation(cur_input_img, i, variation_delta_fixed, variation_delta_random)
+        output_imgs.append(color_variation(cur_output_img, i, variation_delta_fixed, variation_delta_random))
+
+    return output_imgs
 
 
 dict_augmentation_func = {"first_stage": first_stage_augmentation, "second_stage": second_stage_augmentation,
