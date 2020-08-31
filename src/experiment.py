@@ -3,7 +3,7 @@ import numpy as np
 from .augmentation import dict_augmentation_func
 from .integration import  dict_integration_func
 from sklearn.metrics import mean_squared_error
-from .utils import from_srgb_to_rgb, from_rgb_to_srgb
+from .utils import from_srgb_to_rgb, from_rgb_to_srgb, image_brightness_prealignment
 from skimage import io
 import os
 import shutil
@@ -37,7 +37,7 @@ def measure_convergence(imgs, convergence_interval = 0.1):
     return (convergence_rate, convergence_flag)
 
 
-def conduct_experiment(img_path, videoflow_size = 100, stage_augmentation = "first_stage", stage_integration = "first_stage", \
+def conduct_experiment(img_path, videoflow_size = 100, stage_augmentation = "first_stage", stage_integration = "first_stage",
                        integrated_imgs_save_base_dir = None, num_experiments = 1000):
 
     np.random.seed(42)
@@ -45,7 +45,8 @@ def conduct_experiment(img_path, videoflow_size = 100, stage_augmentation = "fir
     convergence_rates = [] #np.array()
 
     input_img = io.imread(img_path)
-    transformed_input_img = from_srgb_to_rgb(copy.deepcopy(input_img).astype(dtype = np.float32) / 255)
+    transformed_input_img = from_srgb_to_rgb(copy.deepcopy(input_img).astype(dtype = np.float32) / 255.0)
+    transformed_input_img = image_brightness_prealignment(transformed_input_img)
     raw_imgs = videoflow_size * [transformed_input_img]
 
     if os.path.exists(integrated_imgs_save_base_dir):
