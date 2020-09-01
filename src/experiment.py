@@ -9,6 +9,7 @@ import os
 import shutil
 import copy
 from tqdm import tqdm
+import os
 
 def l2_metric(img_prev, img_next):
 
@@ -74,7 +75,7 @@ def conduct_experiment(img_path, videoflow_size = 100, stage_augmentation = "fir
             shutil.rmtree(cur_experiment_raw_dir)
         os.makedirs(cur_experiment_raw_dir)
 
-        for img_num, cur_augmented_img in tqdm(enumerate(augmented_imgs)):
+        for img_num, cur_augmented_img in enumerate(augmented_imgs):
             io.imsave(cur_experiment_raw_dir + "/img_" + str(img_num).zfill(int(np.log10(videoflow_size))) + ".png",
                       (from_rgb_to_srgb(cur_augmented_img) * 255).astype(dtype = np.uint8))
 
@@ -91,9 +92,7 @@ def conduct_experiment(img_path, videoflow_size = 100, stage_augmentation = "fir
             shutil.rmtree(cur_experiment_save_dir)
         os.makedirs(cur_experiment_save_dir)
 
-        print(np.max(((from_rgb_to_srgb(integrated_imgs[len(integrated_imgs) - 1]) * 255).astype(dtype=np.uint8))))
-
-        for img_num, cur_integrated_img in tqdm(enumerate(integrated_imgs)):
+        for img_num, cur_integrated_img in enumerate(integrated_imgs):
             io.imsave(cur_experiment_save_dir + "/img_" + str(img_num).zfill(int(np.log10(videoflow_size))) + ".png",
                       (from_rgb_to_srgb(cur_integrated_img) * 255).astype(dtype = np.uint8))
 
@@ -102,6 +101,8 @@ def conduct_experiment(img_path, videoflow_size = 100, stage_augmentation = "fir
 
         io.imsave(cur_experiment_save_dir + "/result_img.png",
                   (from_rgb_to_srgb(integrated_imgs[len(integrated_imgs) - 1]) * 255).astype(dtype = np.uint8))
+
+        #os.system('cls' if os.name == 'nt' else 'clear')
 
     convergence_rates = np.array(convergence_rates)
 

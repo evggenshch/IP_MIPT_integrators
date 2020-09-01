@@ -70,5 +70,5 @@ def third_stage_integration(input_imgs):
 
     return (integral_imgs, result_img)
 
-dict_integration_func = {"first_stage": first_stage_integration, "second_stage": second_stage_integration, \
-                          "third_stage": third_stage_integration}
+dict_integration_func = {"first_stage_int": first_stage_integration, "second_stage_int": second_stage_integration, \
+                          "third_stage_int": third_stage_integration}

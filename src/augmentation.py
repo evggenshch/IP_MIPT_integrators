@@ -12,8 +12,8 @@ def neg_exp_variation(x):
     return np.exp(- x ** 2)
 
 def default_brightness_variation_func(input_pixel, row, column):
-    return np.clip(0.2, 0.9, np.sqrt(np.square(sine_variation(row) * input_pixel)
-                                     + np.square(cosine_variation(column) * input_pixel)))
+    return np.clip(0.2, 0.9, np.sqrt(np.square(sine_variation(0.3 * row) * input_pixel)
+                                     + np.square(cosine_variation(0.1 * column) * input_pixel)))
 
 def brightness_variation(input_img, random_seed = 42, variation_delta_fixed = 0.05, variation_delta_random = 0.1,
                              variation_func = None):
@@ -29,11 +29,17 @@ def brightness_variation(input_img, random_seed = 42, variation_delta_fixed = 0.
         augmented_img = (input_img * ((1.0 + random_delta + variation_delta_fixed) if (random_delta > 0)
                                       else (1.0 + random_delta - variation_delta_fixed)))
 
-        for row, cur_row in enumerate(input_img):
-            for column, cur_column in enumerate(cur_row):
-                for channel, cur_channel in enumerate(cur_column):
-                    augmented_img[row][column][channel] = variation_func(input_img[row][column][channel],
-                                                                             row, column)
+        dim_augmet_img = lambda t, row, column: variation_func(t, row, column)
+        vectorized_dim_augmet_img = np.vectorize(dim_augmet_img)
+
+        augmented_img = vectorized_dim_augmet_img(augmented_img, np.repeat((np.arange(0, augmented_img.shape[0], None)), augmented_img.shape[1], axis=1),
+                                                 np.repeat(np.arange(0, augmented_img.shape[1]).transpose(), augmented_img.shape[0], axis=0))
+
+   #     for row, cur_row in enumerate(input_img):
+   #         for column, cur_column in enumerate(cur_row):
+   #             for channel, cur_channel in enumerate(cur_column):
+   #                 augmented_img[row][column][channel] = variation_func(input_img[row][column][channel],
+   #                                                                          row, column)
 
     return augmented_img
 
@@ -90,5 +96,5 @@ def third_stage_augmentation(input_imgs, random_seed = 42, variation_delta_fixed
     return output_imgs
 
 
-dict_augmentation_func = {"first_stage": first_stage_augmentation, "second_stage": second_stage_augmentation,
-                          "third_stage": third_stage_augmentation}
+dict_augmentation_func = {"first_stage_aug": first_stage_augmentation, "second_stage_aug": second_stage_augmentation,
+                          "third_stage_aug": third_stage_augmentation}
